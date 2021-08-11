@@ -6,6 +6,7 @@ import webbrowser
 import os
 import random
 import numpy as np
+import smtplib
 
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
@@ -32,7 +33,7 @@ def wishMe():
         speak("Good Afternoon")   
     else:
         speak("Good EVening")    
-    speak("I am lira Sir. please tell me how may i help you")   
+    speak("I am honey Sir. please tell me how may i help you")   
     
 def takeCommand():
     """
@@ -57,12 +58,18 @@ def takeCommand():
     return query     
            
             
-            
+def sendEmail(to, content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login("uv48762@gmail.com", "upend764@")
+    server.sendmail("uv48762@gmail.com", to, content)
+    server.close()
        
         
 if __name__ == "__main__":
     wishMe()
-    while 1:
+    while True:
         query = takeCommand().lower()
         #logic for executing tasks based on query
         if "wikipedia" in query:
@@ -98,3 +105,23 @@ if __name__ == "__main__":
             num = np.random.randint(0, len(songs)-1)
             os.startfile(os.path.join(music_dir,songs[num]))    
             
+        elif  "the time" in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"sir, the time is {strTime}")
+            
+
+        elif "open code" in query:
+            codePath = "C:\\Users\\USER\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
+            
+        elif "send email to upendra" in query:
+            try:
+                speak("What should i say?")
+                content = takeCommand()
+                to = "uk48762@gmail.com"
+                sendEmail(to, content)
+                speak("Email has been sent!")
+                
+            except Exception as e:
+                print(e)
+                speak("Sorry sir, i am not able to send this email")
